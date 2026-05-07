@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="hr" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mrežni protokoli</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root,
+    [data-theme="light"] {
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-12: 3rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --color-bg: #f7f6f2;
+      --color-surface: #fbfbf9;
+      --color-surface-2: #f1efea;
+      --color-border: #d4d1ca;
+      --color-text: #28251d;
+      --color-text-muted: #6f6d67;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --shadow-md: 0 8px 24px rgba(40, 37, 29, 0.08);
+      --font-body: 'Satoshi', Arial, sans-serif;
+      --ssbjj-primary: #ffe640;
+      --ssbjj-secondary: #034ea2;
+    }
+
+    [data-theme="dark"] {
+      --color-bg: #171614;
+      --color-surface: #1c1b19;
+      --color-surface-2: #22211f;
+      --color-border: #393836;
+      --color-text: #ece8df;
+      --color-text-muted: #b4afa5;
+      --color-primary: #4f98a3;
+      --color-primary-hover: #68aeba;
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+      --ssbjj-primary: #ffe640;
+      --ssbjj-secondary: #034ea2;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.6;
+      color: var(--color-text);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 32%),
+        var(--color-bg);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+    }
+
+    .skip-link:focus {
+      left: var(--space-4);
+      top: var(--space-4);
+      background: var(--color-primary);
+      color: white;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      z-index: 1000;
+    }
+
+    .page {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: var(--space-8) 0 var(--space-12);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    .title-block h1 {
+      margin: 0 0 var(--space-2);
+      font-size: var(--text-xl);
+      line-height: 1.1;
+    }
+
+    .title-block p {
+      margin: 0;
+      color: var(--color-text-muted);
+      max-width: 60ch;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: var(--space-3);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      font: inherit;
+      cursor: pointer;
+      min-height: 44px;
+      transition: 180ms ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    .button-primary {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+
+    .button-primary:hover,
+    .button-primary:focus-visible {
+      background: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+    }
+
+    .card {
+      background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    caption {
+      text-align: left;
+      padding: var(--space-6) var(--space-6) 0;
+      font-weight: 700;
+      font-size: var(--text-lg);
+    }
+
+    th,
+    td {
+      border: 1px solid var(--color-border);
+      padding: 1rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    thead th {
+      background: var(--color-surface-2);
+      font-size: var(--text-sm);
+      letter-spacing: 0.02em;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: color-mix(in srgb, var(--color-surface-2) 45%, transparent);
+    }
+
+    .protocol strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: var(--text-sm);
+    }
+
+    .protocol span {
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+      font-style: italic;
+    }
+
+    .purpose {
+      font-weight: 500;
+      width: 18%;
+    }
+
+    footer {
+      margin-top: var(--space-6);
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+    }
+
+    .ssbjj {
+      position: relative;
+      color: var(--ssbjj-secondary);
+      text-decoration: none;
+      transition: all 250ms ease-in-out;
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        background-color: var(--ssbjj-secondary);
+        transition: all 250ms ease-in-out;
+      }
+    }
+
+    .ssbjj:hover {
+      color: var(--ssbjj-primary);
+
+       &::before {
+        width: 100%;
+        height: 1px;
+        background-color: var(--ssbjj-primary);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 1rem, 1000px);
+        padding-top: var(--space-6);
+      }
+
+      th,
+      td {
+        padding: 0.8rem;
+      }
+
+      caption {
+        padding: var(--space-4) var(--space-4) 0;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .toolbar {
+        display: none;
+      }
+
+      .card {
+        box-shadow: none;
+      }
+
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#sadrzaj">Preskoči na sadržaj</a>
+  <main class="page" id="sadrzaj">
+    <header>
+      <div class="title-block">
+        <h1>Mrežni protokoli</h1>
+        <p>Pregled osnovnih mrežnih i komunikacijskih protokola.</p>
+      </div>
+      <div class="toolbar" aria-label="Alati stranice">
+        <button type="button" data-theme-toggle aria-label="Promijeni temu">🌙</button>
+        <button type="button" class="button-primary" onclick="window.print()">Ispis / PDF</button>
+      </div>
+    </header>
+
+    <section class="card" aria-labelledby="naslov-tablice">
+      <div class="table-wrap">
+        <table>
+          <caption id="naslov-tablice">Tablica mrežnih protokola</caption>
+          <thead>
+            <tr>
+              <th scope="col">Protokol</th>
+              <th scope="col">Namjena</th>
+              <th scope="col">Opis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Mrežna komunikacija</td>
+              <td>Omogućuje prijenos mrežnog sadržaja između klijenta i poslužitelja kroz sustav zahtjeva i odgovora.
+              </td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Sigurna mrežna komunikacija</td>
+              <td>Sigurna je verzija ____ jer upotrebljava enkripciju za zaštitu podataka tijekom prijenosa između
+                preglednika i mrežnog poslužitelja.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Prijenos datoteka</td>
+              <td>Omogućuje prijenos datoteka između klijenta i poslužitelja, a podatke šalje nešifrirano pa zato nije
+                siguran.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Siguran prijenos datoteka</td>
+              <td>Omogućuje siguran prijenos datoteka jer koristi enkripciju.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Slanje e-pošte</td>
+              <td>Omogućuje slanje e-pošte od klijenta do poslužitelja ili između samih poslužitelja.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Čitanje e-pošte</td>
+              <td>Omogućuje korisnicima pristup i upravljanje e-poštom izravno na poslužitelju, bez potrebe da se poruke
+                preuzmu lokalno.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Preuzimanje e-pošte</td>
+              <td>Omogućuje preuzimanje e-pošte s poslužitelja na lokalno računalo.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Pretvorba imena u IP</td>
+              <td>Prevodi lako pamtljiva imena domena, poput skole.hr, u numeričke IP adrese koje računala
+                upotrebljavaju za komunikaciju.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Automatska dodjela IP adresa</td>
+              <td>Automatski dodjeljuje mrežne adrese uređajima u mreži.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Pouzdan prijenos</td>
+              <td>Pouzdani transportni protokol koji osigurava da svi podaci stignu na odredište ispravnim redom i bez
+                gubitaka. Koristi mehanizme poput potvrda, ponovnog slanja i kontrole toka kako bi osigurao isporuku
+                podataka.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Brz prijenos</td>
+              <td>Nepouzdani transportni protokol koji šalje podatke bez provjere isporuke, redoslijeda ili pogrešaka.
+                Rabe ga aplikacije kojima je važna brzina, poput online igara, VoIP poziva i video streaminga.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Adresiranje i usmjeravanje</td>
+              <td>Omogućuje adresiranje uređaja i usmjeravanje paketa kroz mrežu kako bi podaci stigli do odredišta.
+              </td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Dijagnostika</td>
+              <td>Omogućuje slanje kontrolnih i dijagnostičkih poruka, poput onih koje koriste alati ping i traceroute
+                za provjeru dostupnosti mrežnih uređaja.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">IPv4 → MAC</td>
+              <td>Omogućuje pronalaženje MAC adrese za poznatu IP adresu u lokalnoj mreži.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Žična komunikacija</td>
+              <td>Standard za prijenos preko bakrenih ili optičkih kabela.</td>
+            </tr>
+            <tr>
+              <td class="protocol"></td>
+              <td class="purpose">Bežična komunikacija</td>
+              <td>Standard za bežične LAN mreže preko radiovalova.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      Pregled za učenike <a href="https://ss-ban-jjelacic-zapresic.skole.hr/" target="_blank" class="ssbjj">SŠBJJ</a>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const button = document.querySelector('[data-theme-toggle]');
+      const root = document.documentElement;
+      let current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', current);
+
+      function updateButton() {
+        button.textContent = current === 'dark' ? '☀️' : '🌙';
+        button.setAttribute('aria-label', current === 'dark' ? 'Prebaci na svijetlu temu' : 'Prebaci na tamnu temu');
+      }
+
+      updateButton();
+      button.addEventListener('click', function () {
+        current = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', current);
+        updateButton();
+      });
+    })();
+  </script>
+</body>
+
+</html>
